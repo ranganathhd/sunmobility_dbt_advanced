@@ -1,0 +1,24 @@
+# dbt compiled files
+target/
+
+# installed dbt packages
+dbt_packages/
+
+# dbt log files
+logs/
+
+# virtual environment
+dbt_env/
+
+# environment variables and passwords
+.env
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Mac system file
+.DS_Store
+
+# generated data files
+data/

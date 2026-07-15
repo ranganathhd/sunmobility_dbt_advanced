@@ -1,0 +1,26 @@
+# project name — must match profiles.yml
+name: 'sunmobility_advanced_project'
+version: '1.0.0'
+config-version: 2
+
+# which profile to use — must match profiles.yml name
+profile: 'sunmobility_advanced_project'
+
+# folder paths — tells dbt where each type of file lives
+model-paths:    ["models"]
+seed-paths:     ["seeds"]
+snapshot-paths: ["snapshots"]
+macro-paths:    ["macros"]
+test-paths:     ["tests"]
+
+# default settings for each layer
+models:
+  sunmobility_advanced_project:
+    staging:
+      +materialized: view        # staging = views — no storage
+      +schema: DBT_STAGING       # staging models go here
+    intermediate:
+      +materialized: ephemeral   # intermediate = no table created
+    marts:
+      +materialized: table       # marts = physical tables
+      +schema: DBT_MARTS         # mart models go here
