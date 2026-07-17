@@ -5,6 +5,39 @@ sources:
     database: SUNMOBILITY_ADVANCED_DB
     schema: RAW_DATA
     tables:
+
+      - name: swap_records_processed
+        description: "Processed swap records from stream and task"
+        config:
+          loaded_at_field: processed_at
+          freshness:
+            warn_after:  {count: 20, period: minute}
+            error_after: {count: 60, period: minute}
+
+      - name: station_alerts_processed
+        description: "Processed station alerts from stream and task"
+        config:
+          loaded_at_field: processed_at
+          freshness:
+            warn_after:  {count: 20, period: minute}
+            error_after: {count: 60, period: minute}
+
+      - name: battery_alerts_processed
+        description: "Processed battery alerts from stream and task"
+        config:
+          loaded_at_field: processed_at
+          freshness:
+            warn_after:  {count: 20, period: minute}
+            error_after: {count: 60, period: minute}
+
+      - name: vehicle_live_data_processed
+        description: "Processed vehicle live data from stream and task"
+        config:
+          loaded_at_field: processed_at
+          freshness:
+            warn_after:  {count: 20, period: minute}
+            error_after: {count: 60, period: minute}
+
       - name: stations
         description: "Raw station data loaded from S3 via Snowpipe"
       - name: retail_customers
@@ -15,31 +48,20 @@ sources:
         description: "Raw vehicle data loaded from S3"
       - name: battery_packs
         description: "Raw battery pack data loaded from S3"
-      - name: swap_records_processed
-        description: "Processed swap records from stream and task"
-      - name: station_alerts_processed
-        description: "Processed station alerts from stream and task"
-      - name: battery_alerts_processed
-        description: "Processed battery alerts from stream and task"
-      - name: vehicle_live_data_processed
-        description: "Processed vehicle live data from stream and task"
 
 models:
   - name: stg_stations
     description: "Cleaned station data with GPS coordinates"
     columns:
       - name: station_id
-        description: "Unique station identifier"
         tests:
           - unique
           - not_null
       - name: status
-        description: "Station status"
         tests:
           - accepted_values:
               values: ['ONLINE', 'OFFLINE', 'ONBOARDING']
       - name: region
-        description: "Region of station"
         tests:
           - accepted_values:
               values: ['NORTH', 'SOUTH', 'EAST', 'WEST']
@@ -48,42 +70,34 @@ models:
     description: "Cleaned retail customer data"
     columns:
       - name: customer_id
-        description: "Unique retail customer identifier"
         tests:
           - unique
           - not_null
       - name: status
-        description: "Customer status"
         tests:
           - accepted_values:
               values: ['ACTIVE', 'INACTIVE']
-             
 
   - name: stg_fleet_customers
     description: "Cleaned fleet customer data"
     columns:
       - name: fleet_id
-        description: "Unique fleet customer identifier"
         tests:
           - unique
           - not_null
       - name: status
-        description: "Fleet status"
         tests:
           - accepted_values:
               values: ['ACTIVE', 'INACTIVE']
-              
 
   - name: stg_vehicles
     description: "Cleaned vehicle data"
     columns:
       - name: vehicle_id
-        description: "Unique vehicle identifier"
         tests:
           - unique
           - not_null
       - name: customer_type
-        description: "Type of customer"
         tests:
           - accepted_values:
               values: ['RETAIL', 'FLEET']
@@ -92,12 +106,10 @@ models:
     description: "Cleaned battery pack data with health percentage"
     columns:
       - name: battery_id
-        description: "Unique battery identifier"
         tests:
           - unique
           - not_null
       - name: status
-        description: "Battery status"
         tests:
           - accepted_values:
               values: ['AVAILABLE', 'IN USE', 'FAULTY']
@@ -106,17 +118,14 @@ models:
     description: "Cleaned swap records from processed table"
     columns:
       - name: swap_id
-        description: "Unique swap event identifier"
         tests:
           - unique
           - not_null
       - name: customer_type
-        description: "Retail or Fleet customer"
         tests:
           - accepted_values:
               values: ['RETAIL', 'FLEET']
       - name: swap_status
-        description: "Swap success or failure"
         tests:
           - accepted_values:
               values: ['SUCCESS', 'FAILED']
@@ -125,11 +134,9 @@ models:
     description: "Cleaned station alert data"
     columns:
       - name: alert_id
-        description: "Unique alert identifier"
         tests:
           - not_null
       - name: severity
-        description: "Alert severity level"
         tests:
           - accepted_values:
               values: ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW']
@@ -138,11 +145,9 @@ models:
     description: "Cleaned battery alert data"
     columns:
       - name: alert_id
-        description: "Unique alert identifier"
         tests:
           - not_null
       - name: severity
-        description: "Alert severity level"
         tests:
           - accepted_values:
               values: ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW']
@@ -151,11 +156,9 @@ models:
     description: "Cleaned vehicle GPS and battery data"
     columns:
       - name: record_id
-        description: "Unique record identifier"
         tests:
           - not_null
       - name: ignition_status
-        description: "Vehicle ignition on or off"
         tests:
           - accepted_values:
               values: ['ON', 'OFF']
