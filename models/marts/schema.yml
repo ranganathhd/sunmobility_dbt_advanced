@@ -1,0 +1,94 @@
+version: 2
+
+models:
+  - name: dim_stations
+    description: "Dimension table for swap stations"
+    columns:
+      - name: station_id
+        description: "Unique station identifier"
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_retail_customers
+    description: "Dimension table for retail customers"
+    columns:
+      - name: customer_id
+        description: "Unique retail customer identifier"
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_fleet_customers
+    description: "Dimension table for fleet customers"
+    columns:
+      - name: fleet_id
+        description: "Unique fleet customer identifier"
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_vehicles
+    description: "Dimension table for vehicles"
+    columns:
+      - name: vehicle_id
+        description: "Unique vehicle identifier"
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_battery_packs
+    description: "Dimension table for battery packs"
+    columns:
+      - name: battery_id
+        description: "Unique battery identifier"
+        tests:
+          - unique
+          - not_null
+
+  - name: fct_swaps
+    description: "Fact table for swap transactions — incremental"
+    columns:
+      - name: swap_id
+        description: "Unique swap identifier"
+        tests:
+          - unique
+          - not_null
+      - name: amount
+        description: "Swap amount charged"
+        tests:
+          - not_null
+      - name: customer_type
+        description: "Retail or Fleet"
+        tests:
+          - accepted_values:
+              values: ['RETAIL', 'FLEET']
+
+  - name: fct_alerts
+    description: "Fact table for all alerts — incremental"
+    columns:
+      - name: alert_id
+        description: "Unique alert identifier"
+        tests:
+          - not_null
+      - name: severity
+        description: "Alert severity"
+        tests:
+          - accepted_values:
+              values: ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW']
+
+  - name: fct_vehicle_tracking
+    description: "Fact table for vehicle GPS tracking — incremental"
+    columns:
+      - name: record_id
+        description: "Unique record identifier"
+        tests:
+          - not_null
+
+  - name: fct_fleet_billing
+    description: "Fleet customer monthly billing summary"
+    columns:
+      - name: fleet_id
+        description: "Fleet customer identifier"
+        tests:
+          - not_null
