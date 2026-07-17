@@ -20,6 +20,8 @@ SELECT
     sa.alert_message,
     NULL                   AS battery_health,
     sa.triggered_at,
+    {{ is_high_priority_alert('sa.severity') }} AS is_high_priority,
+
     sa.resolved_at,
     sa.status,
     sa.processed_at,
@@ -42,6 +44,7 @@ SELECT
     ba.alert_type,
     ba.severity,
     ba.alert_message,
+    {{ is_high_priority_alert('sa.severity') }} AS is_high_priority,
     ba.battery_health,
     ba.triggered_at,
     ba.resolved_at,
